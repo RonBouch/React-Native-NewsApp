@@ -5,6 +5,8 @@ import { observer, Provider } from "mobx-react";
 import { create } from 'mobx-persist'
 import RootNavigator from "./RootNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import isEmpty from "lodash/isEmpty";
+import { withQuery } from "../utils/Tools";
 
 const stores = { NewsStore };
 const hydrate = create({
@@ -12,7 +14,7 @@ const hydrate = create({
 });
 const HandleHydrate = async () => {
     return new Promise((resolve, reject) => {
-        hydrate('favorites', NewsStore).then(() => {
+        hydrate('news', NewsStore).then(() => {
             resolve(true)
         })
     })
@@ -22,14 +24,20 @@ const HandleHydrate = async () => {
 export default class MainRoot extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
     }
 
     async componentDidMount() {
         try {
             await HandleHydrate()
+            const params = { 'access_key': 'b924a0ad9b499830e236e11b3a2cff04' }
+            let url = withQuery('http://api.mediastack.com/v1/news', params)
+            if (isEmpty(NewsStore.getNews)) {
+                await fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        NewsStore.setNews(data)
+                    });
+            }
         }
         catch (ex) {
             console.log('MainRoot init Error ' + ex.message)
@@ -60,12 +68,12 @@ const s = StyleSheet.create({
         position: 'absolute',
         width: "100%",
         height: '100%',
-        backgroundColor: 'green',
+        backgroundColor: '#E3DEE5',
         zIndex: 0,
         flex: 1
     },
     safeGray: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: '#E3DEE5'
     },
 });
