@@ -3,13 +3,13 @@ import { persist } from 'mobx-persist'
 
 class NewsStore {
     @persist("object") @observable news = {}
+    @persist('object') @observable user = {}
     @persist('list') @observable favorites = []
-    @observable name = null
 
     //GET
     @computed
-    get getName() {
-        return this.name
+    get getUser() {
+        return this.user
     }
     @computed
     get getFavorites() {
@@ -20,14 +20,15 @@ class NewsStore {
     get getNews() {
         return this.news
     }
+
+    //SET
     @action
-    setNews(data) {
-        console.log("news", data)
-        this.news = data;
+    setUser(data) {
+        this.user = data;
     }
     @action
-    setName(data) {
-        this.name = data;
+    setNews(data) {
+        this.news = data;
     }
     @action
     setFavorite(data) {

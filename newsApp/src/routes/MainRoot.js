@@ -31,13 +31,13 @@ export default class MainRoot extends Component {
             await HandleHydrate()
             const params = { 'access_key': 'b924a0ad9b499830e236e11b3a2cff04' }
             let url = withQuery('http://api.mediastack.com/v1/news', params)
-            if (isEmpty(NewsStore.getNews)) {
+            // if (isEmpty(NewsStore.getNews)) {
                 await fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         NewsStore.setNews(data)
                     });
-            }
+            // }
         }
         catch (ex) {
             console.log('MainRoot init Error ' + ex.message)
@@ -45,6 +45,7 @@ export default class MainRoot extends Component {
     }
 
     render() {
+        if (isEmpty(NewsStore.getNews)) return <View />
         return (
             <SafeAreaView style={s.safeGray} >
                 <View style={s.StatusBarBG} />
