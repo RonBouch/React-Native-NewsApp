@@ -14,7 +14,7 @@ const hydrate = create({
 });
 const HandleHydrate = async () => {
     return new Promise((resolve, reject) => {
-        hydrate('news', NewsStore).then(() => {
+        hydrate('user', NewsStore).then(() => {
             resolve(true)
         })
     })
@@ -26,17 +26,18 @@ export default class MainRoot extends Component {
         super(props);
     }
 
-    async componentDidMount() {
+    componentDidMount = async () => {
         try {
             await HandleHydrate()
             const params = { 'access_key': 'b924a0ad9b499830e236e11b3a2cff04' }
-            let url = withQuery('http://api.mediastack.com/v1/news', params)
+            const newsUrl = 'http://api.mediastack.com/v1/news'
+            let url = withQuery(newsUrl, params)
             // if (isEmpty(NewsStore.getNews)) {
-                await fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        NewsStore.setNews(data)
-                    });
+            await fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    NewsStore.setNews(data)
+                });
             // }
         }
         catch (ex) {

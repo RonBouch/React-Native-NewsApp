@@ -2,7 +2,7 @@ import { observable, action, computed } from "mobx";
 import { persist } from 'mobx-persist'
 
 class NewsStore {
-    @persist("object") @observable news = {}
+    @observable news = {}
     @persist('object') @observable user = {}
     @persist('list') @observable favorites = []
 
